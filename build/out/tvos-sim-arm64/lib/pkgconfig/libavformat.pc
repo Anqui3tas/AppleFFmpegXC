@@ -1,7 +1,7 @@
-prefix=/Users/quentin/Documents/SwiftFFmpeg/build/out/tvos-sim-arm64
+prefix=/Users/quentin/Documents/AppleFFmpegXC/build/out/tvos-sim-arm64
 exec_prefix=${prefix}
-libdir=/Users/quentin/Documents/SwiftFFmpeg/build/out/tvos-sim-arm64/lib
-includedir=/Users/quentin/Documents/SwiftFFmpeg/build/out/tvos-sim-arm64/include
+libdir=/Users/quentin/Documents/AppleFFmpegXC/build/out/tvos-sim-arm64/lib
+includedir=/Users/quentin/Documents/AppleFFmpegXC/build/out/tvos-sim-arm64/include
 
 Name: libavformat
 Description: FFmpeg container format library

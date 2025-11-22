@@ -14,19 +14,32 @@ BUILD_DIR="$ROOT/build/out"
 XC_OUT="$ROOT/xcframeworks"
 # Only one XCFramework should carry headers to avoid duplicate installs in SwiftPM.
 HEADER_CARRIER_LIB=${HEADER_CARRIER_LIB:-libavcodec}
+# Extra flags help keep the generated objects within the platform page alignment
+# limits so Xcode doesn't warn when reducing __DATA alignment.
+EXTRA_FFMPEG_CFLAGS=${EXTRA_FFMPEG_CFLAGS:--fdata-sections -ffunction-sections -fmax-type-align=16}
+EXTRA_FFMPEG_LDFLAGS=${EXTRA_FFMPEG_LDFLAGS:--Wl,-sectalign,__DATA,__common,0x4000}
 
 # Targets: name arch sdk min-version
-TARGETS=(
-  "ios        arm64   iphoneos         $MIN_IOS"
-  "ios-sim    arm64   iphonesimulator  $MIN_IOS"
-  "tvos       arm64   appletvos        $MIN_TVOS"
-  "tvos-sim   arm64   appletvsimulator $MIN_TVOS"
-  "visionos   arm64   xros             $MIN_VISIONOS"
-  "visionos-sim arm64 xrsimulator      $MIN_VISIONOS"
-  "macos      arm64   macosx           $MIN_MACOS"
-  # Uncomment if you want Intel mac sim/support:
-  # "macos      x86_64 macosx           $MIN_MACOS"
-)
+TARGETS_OVERRIDE=${TARGETS_OVERRIDE:-}
+if [[ -n "$TARGETS_OVERRIDE" ]]; then
+  TARGETS=()
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    TARGETS+=("$line")
+  done <<<"$TARGETS_OVERRIDE"
+else
+  TARGETS=(
+    "ios        arm64   iphoneos         $MIN_IOS"
+    "ios-sim    arm64   iphonesimulator  $MIN_IOS"
+    "tvos       arm64   appletvos        $MIN_TVOS"
+    "tvos-sim   arm64   appletvsimulator $MIN_TVOS"
+    "visionos   arm64   xros             $MIN_VISIONOS"
+    "visionos-sim arm64 xrsimulator      $MIN_VISIONOS"
+    "macos      arm64   macosx           $MIN_MACOS"
+    # Uncomment if you want Intel mac sim/support:
+    # "macos      x86_64 macosx           $MIN_MACOS"
+  )
+fi
 
 COMMON_CFG=(
   --enable-cross-compile
@@ -108,12 +121,15 @@ build_target() {
   pushd "$SRC_DIR" >/dev/null
   make distclean || true
 
+  local extra_cflags="$cflags $EXTRA_FFMPEG_CFLAGS"
+  local extra_ldflags="$ldflags $EXTRA_FFMPEG_LDFLAGS"
+
   PKG_CONFIG_PATH="" \
   ./configure \
     --cc="$(xcrun --sdk "$sdk" --find clang)" \
     --sysroot="$sysroot" \
-    --extra-cflags="$cflags" \
-    --extra-ldflags="$ldflags" \
+    --extra-cflags="$extra_cflags" \
+    --extra-ldflags="$extra_ldflags" \
     --prefix="$out" \
     "${COMMON_CFG[@]}"
 
