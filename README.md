@@ -9,7 +9,7 @@ Prebuilt FFmpeg 7.1 XCFrameworks for Apple platforms (iOS, tvOS, macOS, visionOS
 - Patches: guards HEVC/VP9 enums in `videotoolbox.c` and skips OpenGLES compatibility on visionOS; `distclean` between targets to avoid cross-contamination
 
 ## Using in Xcode or SwiftPM
-1. Add the repo as a Swift package (local path while developing, GitHub URL once published).
+1. Add the repo as a Swift package.
 2. Depend on the `FFmpeg` product:
    ```swift
    .package(url: "https://github.com/<org>/SwiftFFmpeg.git", branch: "main"),
