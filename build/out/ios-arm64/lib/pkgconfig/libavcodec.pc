@@ -1,0 +1,14 @@
+prefix=/Users/quentin/Documents/SwiftFFmpeg/build/out/ios-arm64
+exec_prefix=${prefix}
+libdir=/Users/quentin/Documents/SwiftFFmpeg/build/out/ios-arm64/lib
+includedir=/Users/quentin/Documents/SwiftFFmpeg/build/out/ios-arm64/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 61.19.100
+Requires: libswresample >= 5.3.100, libavutil >= 59.39.100
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavcodec -lm -pthread -framework VideoToolbox -framework CoreFoundation -framework CoreMedia -framework CoreVideo
+Libs.private: 
+Cflags: -I${includedir}
