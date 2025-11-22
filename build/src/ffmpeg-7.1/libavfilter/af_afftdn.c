@@ -369,7 +369,7 @@ static void process_frame(AVFilterContext *ctx,
     double *gain = dnch->gain;
 
     for (int i = 0; i < s->bin_count; i++) {
-        double sqr_new_gain, new_gain, power, mag, mag_abs_var, new_mag_abs_var;
+        double sqr_new_gain, new_gain, power, mag = 0.0, mag_abs_var, new_mag_abs_var;
 
         switch (s->format) {
         case AV_SAMPLE_FMT_FLTP:

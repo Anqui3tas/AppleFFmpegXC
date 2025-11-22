@@ -321,7 +321,7 @@
 @c @set have-pthread-set-name-np no
 @set have-pthread-setname-np yes
 @c @set have-sched-getaffinity no
-@c @set have-secitemimport no
+@set have-secitemimport yes
 @c @set have-setconsoletextattribute no
 @c @set have-setconsolectrlhandler no
 @c @set have-setdlldirectory no
@@ -574,7 +574,7 @@
 @c @set config-metal no
 @c @set config-schannel no
 @c @set config-sdl2 no
-@c @set config-securetransport no
+@set config-securetransport yes
 @c @set config-sndio no
 @c @set config-xlib no
 @c @set config-zlib no
@@ -2954,11 +2954,11 @@
 @set config-file-protocol yes
 @set config-ftp-protocol yes
 @set config-gopher-protocol yes
-@c @set config-gophers-protocol no
+@set config-gophers-protocol yes
 @set config-hls-protocol yes
 @set config-http-protocol yes
 @set config-httpproxy-protocol yes
-@c @set config-https-protocol no
+@set config-https-protocol yes
 @set config-icecast-protocol yes
 @set config-mmsh-protocol yes
 @set config-mmst-protocol yes
@@ -2967,17 +2967,17 @@
 @set config-prompeg-protocol yes
 @set config-rtmp-protocol yes
 @c @set config-rtmpe-protocol no
-@c @set config-rtmps-protocol no
+@set config-rtmps-protocol yes
 @set config-rtmpt-protocol yes
 @c @set config-rtmpte-protocol no
-@c @set config-rtmpts-protocol no
+@set config-rtmpts-protocol yes
 @set config-rtp-protocol yes
 @c @set config-sctp-protocol no
 @set config-srtp-protocol yes
 @set config-subfile-protocol yes
 @set config-tee-protocol yes
 @set config-tcp-protocol yes
-@c @set config-tls-protocol no
+@set config-tls-protocol yes
 @set config-udp-protocol yes
 @set config-udplite-protocol yes
 @set config-unix-protocol yes
@@ -2992,5 +2992,5 @@
 @c @set config-libssh-protocol no
 @c @set config-libsmbclient-protocol no
 @c @set config-libzmq-protocol no
-@c @set config-ipfs-gateway-protocol no
-@c @set config-ipns-gateway-protocol no
+@set config-ipfs-gateway-protocol yes
+@set config-ipns-gateway-protocol yes

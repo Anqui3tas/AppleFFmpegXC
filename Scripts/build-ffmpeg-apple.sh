@@ -17,7 +17,7 @@ HEADER_CARRIER_LIB=${HEADER_CARRIER_LIB:-libavcodec}
 # Extra flags help keep the generated objects within the platform page alignment
 # limits so Xcode doesn't warn when reducing __DATA alignment.
 EXTRA_FFMPEG_CFLAGS=${EXTRA_FFMPEG_CFLAGS:--fdata-sections -ffunction-sections -fmax-type-align=16}
-EXTRA_FFMPEG_LDFLAGS=${EXTRA_FFMPEG_LDFLAGS:--Wl,-sectalign,__DATA,__common,0x4000}
+EXTRA_FFMPEG_LDFLAGS=${EXTRA_FFMPEG_LDFLAGS:--Wl,-sectalign,__DATA,__common,0x4000 -framework Security -framework CoreFoundation}
 
 # Targets: name arch sdk min-version
 TARGETS_OVERRIDE=${TARGETS_OVERRIDE:-}
@@ -50,6 +50,8 @@ COMMON_CFG=(
   --enable-pic
   --disable-autodetect
   --enable-videotoolbox
+  --enable-securetransport
+  --disable-filter=zscale
   --enable-protocol=file,https,tcp,tls
   --enable-demuxer=mov,matroska,mpegts,hls,flv
   --enable-muxer=mp4,matroska,mpegts,hls,segment
@@ -78,6 +80,11 @@ apply_patches() {
   # visionOS: avoid OpenGLES compatibility key which is unavailable.
   perl -0pi -e "s/#if TARGET_OS_IPHONE\\n    CFDictionarySetValue\\(buffer_attributes, kCVPixelBufferOpenGLESCompatibilityKey, kCFBooleanTrue\\);/#if TARGET_OS_IPHONE \\&\\& !TARGET_OS_VISION\\n    CFDictionarySetValue(buffer_attributes, kCVPixelBufferOpenGLESCompatibilityKey, kCFBooleanTrue);/" "$vt"
   perl -0pi -e "s/#else\\n    CFDictionarySetValue\\(buffer_attributes, kCVPixelBufferIOSurfaceOpenGLTextureCompatibilityKey, kCFBooleanTrue\\);/#elif !TARGET_OS_IPHONE\\n    CFDictionarySetValue(buffer_attributes, kCVPixelBufferIOSurfaceOpenGLTextureCompatibilityKey, kCFBooleanTrue);/" "$vt"
+
+  local afftdn="$SRC_DIR/libavfilter/af_afftdn.c"
+  if [[ -f "$afftdn" ]]; then
+    perl -0pi -e 's/double sqr_new_gain, new_gain, power, mag, mag_abs_var, new_mag_abs_var;/double sqr_new_gain, new_gain, power, mag = 0.0, mag_abs_var, new_mag_abs_var;/' "$afftdn"
+  fi
 }
 
 build_target() {
