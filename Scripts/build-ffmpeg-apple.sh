@@ -57,7 +57,8 @@ COMMON_CFG=(
   --enable-muxer=mp4,matroska,mpegts,hls,segment
   --enable-parser=h264,hevc,aac,ac3,eac3,truehd,dca
   --enable-decoder=h264,hevc,eac3,truehd,ac3,aac,alac,flac,opus,vorbis,mp3,dca,pcm_s16le,pcm_s24le,pgssub,ass,srt
-  --enable-filter=aresample,afloudnorm,anlmdn,pad,scale,scale_videotoolbox,zscale,tonemap
+  # zscale requires external libzimg; keep it disabled unless you add that dependency.
+  --enable-filter=aresample,afloudnorm,anlmdn,pad,scale,scale_videotoolbox,tonemap
 )
 
 fetch_ffmpeg() {
@@ -126,7 +127,10 @@ build_target() {
   local out="$BUILD_DIR/$name-$arch"
   mkdir -p "$out"
   pushd "$SRC_DIR" >/dev/null
-  make distclean || true
+  # Skip noisy distclean on a fresh tree with no config.mak.
+  if [[ -f ffbuild/config.mak ]]; then
+    make distclean
+  fi
 
   local extra_cflags="$cflags $EXTRA_FFMPEG_CFLAGS"
   local extra_ldflags="$ldflags $EXTRA_FFMPEG_LDFLAGS"
